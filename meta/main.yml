@@ -1,7 +1,7 @@
 ---
 
 galaxy_info:
-  role_name: sssd
+  role_name: linux_ad_auth
   author: Daniel Sánchez Fábregas / Juan Antonio Valiño García
   description: Setup system authentication to use Windows Active Directory.
   company: AMTEGA - Xunta de Galicia
