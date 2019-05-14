@@ -1,2 +1,70 @@
 ---
 # Role default lower priority variables
+
+# Active Directory domain controller
+
+# linux_ad_auth_domain_controller:
+
+# OU where to put host within Active Directory
+
+#linux_ad_auth_host_ou:
+
+# Host to use as intermediate to create the host in the Active Directory
+# computers tree. Usefull if docker you want to use an intermediate machine for
+# this task
+
+linux_ad_auth_intermediate: "{{ linux_ad_auth_domain_controller }}"
+
+# Active directory domain
+
+linux_ad_auth_domain: >-
+  {{ linux_ad_auth_domain_controller.split(".")[1:] | join(".") }}
+
+# Username and password to use for active directory operations
+
+linux_ad_auth_user: "{{ ansible_user }}"
+linux_ad_auth_password: "{{ ansible_password }}"
+
+# Host Netbios name in active directory. Lenght must be <= 15.
+
+linux_ad_auth_host_netbios_name: "{{ inventory_hostname }}"
+
+# State of Active Directory authentication. Can be present or absent.
+
+linux_ad_auth_state: present
+
+# Kerberos settings. See man krb5.conf(5) for details
+
+linux_ad_auth_krb5_realm: "{{ linux_ad_auth_domain | upper }}"
+linux_ad_auth_krb5_kdc: "{{ linux_ad_auth_domain_controller }}"
+linux_ad_auth_krb5_admin_server: "{{ linux_ad_auth_krb5_kdc }}"
+linux_ad_auth_krb5_default_domain: "{{ linux_ad_auth_domain }}"
+linux_ad_auth_krb5_default_log: FILE:/var/log/krb5libs.log
+linux_ad_auth_krb5_kdc_log: FILE:/var/log/krb5kdc.log
+linux_ad_auth_krb5_admin_server_log: FILE:/var/log/kadmind.log
+linux_ad_auth_krb5_dns_lookup_realm: no
+linux_ad_auth_krb5_dns_lookup_kdc: no
+linux_ad_auth_krb5_ticket_lifetime: 24h
+linux_ad_auth_krb5_renew_lifetime: 7d
+linux_ad_auth_krb5_forwardable: true
+linux_ad_auth_krb5_pam_debug: no
+linux_ad_auth_krb5_pam_ticket_lifetime: 36000
+linux_ad_auth_krb5_pam_renew_lifetime: 36000
+linux_ad_auth_krb5_pam_forwardable: yes
+linux_ad_auth_krb5_pam_krb4_convert: no
+
+# SSSD settings. See man sssd.conf(5) for details
+
+linux_ad_auth_sssd_simple_allow_groups: []
+linux_ad_auth_sssd_realmd_tags: manages-system joined-with-adcli
+linux_ad_auth_sssd_cache_credentials: yes
+linux_ad_auth_sssd_krb5_store_password_if_offline: yes
+linux_ad_auth_sssd_default_shell: /bin/bash
+linux_ad_auth_sssd_ldap_id_mapping: yes
+linux_ad_auth_sssd_use_fully_qualified_names: no
+linux_ad_auth_sssd_fallback_homedir: /home/%d/%u
+linux_ad_auth_sssd_dyndns_update: yes
+linux_ad_auth_sssd_dyndns_refresh_interval: 43200
+linux_ad_auth_sssd_dyndns_update_ptr: yes
+linux_ad_auth_sssd_dyndns_ttl: 3600
+linux_ad_auth_sssd_access_provider: simple

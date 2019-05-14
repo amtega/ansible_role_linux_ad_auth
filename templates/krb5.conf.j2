@@ -1,0 +1,36 @@
+{{ ansible_managed | comment }}
+
+includedir /var/lib/sss/pubconf/krb5.include.d/
+
+[logging]
+default = {{ linux_ad_auth_krb5_default_log }}
+kdc = {{ linux_ad_auth_krb5_kdc_log }}
+admin_server = {{ linux_ad_auth_krb5_admin_server_log }}
+
+[libdefaults]
+default_realm = {{ linux_ad_auth_krb5_realm }}
+dns_lookup_realm = {{ (linux_ad_auth_krb5_realm) | ternary("True", "False") }}
+dns_lookup_kdc = {{ (linux_ad_auth_krb5_dns_lookup_kdc) | ternary("True", "False") }}
+ticket_lifetime = {{ linux_ad_auth_krb5_ticket_lifetime }}
+renew_lifetime = {{ linux_ad_auth_krb5_renew_lifetime }}
+forwardable = {{ (linux_ad_auth_krb5_forwardable) | ternary("True", "False") }}
+
+[realms]
+   {{ linux_ad_auth_krb5_realm }} = {
+     kdc = {{ linux_ad_auth_krb5_kdc }}
+     admin_server = {{ linux_ad_auth_krb5_admin_server }}
+     default_domain = {{ linux_ad_auth_krb5_default_domain }}
+   }
+
+[domain_realm]
+   .{{ linux_ad_auth_krb5_default_domain }} = {{ linux_ad_auth_krb5_realm }}
+   {{ linux_ad_auth_krb5_default_domain }} = {{ linux_ad_auth_krb5_realm }}
+
+[appdefaults]
+pam = {
+   debug = {{ (linux_ad_auth_krb5_pam_debug) | ternary("True", "False") }}
+   ticket_lifetime = {{ linux_ad_auth_krb5_pam_ticket_lifetime }}
+   renew_lifetime = {{ linux_ad_auth_krb5_pam_renew_lifetime }}
+   forwardable = {{ (linux_ad_auth_krb5_pam_forwardable) | ternary("True", "False") }}
+   krb4_convert = {{ (linux_ad_auth_krb5_pam_krb4_convert) | ternary("True", "False") }}
+}
