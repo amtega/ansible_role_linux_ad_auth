@@ -1,2 +1,126 @@
 ---
-# Role tasks
+
+- block:
+    - name: Assert netbios name length is valid
+      assert:
+        that: >-
+          linux_ad_auth_host_netbios_name | length
+          <= linux_ad_auth_netbios_name_max_length
+        msg: "Netbios name too long ({{ linux_ad_auth_host_netbios_name }})"
+
+    - name: Authenticate into domain
+      expect:
+        command: >-
+          kinit {{ linux_ad_auth_user }}@{{ linux_ad_auth_krb5_realm }}
+        responses:
+          Password*: "{{ linux_ad_auth_password }}"
+      changed_when: no
+      no_log: no
+
+    - name: Check domain membership
+      command: "/usr/sbin/realm discover {{ linux_ad_auth_domain }}"
+      register: ssd_realm_discover_result
+      changed_when: no
+
+    - block:
+        - name: Setup host computer object in active directory
+          win_domain_komputer:
+            name: "{{ inventory_hostname }}"
+            sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
+            dns_hostname: >-
+              {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
+            ou: "{{ linux_ad_auth_host_ou }}"
+            description: "{{ inventory_hostname }}"
+            enabled: yes
+            state: "{{ linux_ad_auth_state }}"
+          delegate_to: "{{ linux_ad_auth_intermediate }}"
+
+        - block:
+            - name: Configure autentication
+              command: >-
+                /usr/sbin/authconfig
+                --enablesssd
+                --enablesssdauth
+                --enablelocauthorize
+                --enablemkhomedir
+                --update
+
+            - name: Setup kerberos config file
+              template:
+                src: krb5.conf.j2
+                dest: /etc/krb5.conf
+                owner: root
+                group: root
+                mode: 0644
+                backup: yes
+
+            - name: Join host to domain
+              command: >-
+                /usr/sbin/realm join '{{ linux_ad_auth_domain_controller }}'
+                --computer-ou='{{ linux_ad_auth_host_ou }}'
+                --computer-name='{{ linux_ad_auth_host_netbios_name }}'
+                --os-name='{{ ansible_facts.distribution }}'
+                --os-version='{{ ansible_facts.distribution_version }}'
+                --verbose
+              register: linux_ad_auth_join_realm_result
+              failed_when: >-
+                linux_ad_auth_join_realm_result.rc != 0
+                and "realm: Already joined to this domain"
+                    not in linux_ad_auth_join_realm_result.stdout
+
+            - name: Setup sssd config file
+              template:
+                src: sssd.conf.j2
+                dest: /etc/sssd/sssd.conf
+                owner: root
+                group: root
+                mode: 0600
+                backup: yes
+              register: linux_ad_auth_conf_result
+              vars:
+                linux_ad_auth_ad_hostname: "{{ inventory_hostname }}"
+
+            - name: Restart sssd service
+              service:
+                name: sssd
+                state: restarted
+                enabled: yes
+              when: linux_ad_auth_conf_result.changed
+          when: linux_ad_auth_state == "present"
+
+        - name: Remove host from domain
+          command: /usr/sbin/realm leave -v
+          register: linux_ad_auth_leave_realm_result
+          failed_when: >
+            linux_ad_auth_leave_realm_result.rc != 0
+            and "realm: Couldn't find a configured realm"
+                not in linux_ad_auth_join_realm_result.stdout
+          when: linux_ad_auth_state == "absent"
+
+        - name: Setup domain related services
+          service:
+            name: "{{ ssd_service_item }}"
+            enabled: >-
+              {{ (linux_ad_auth_state == "present") | ternary("yes", "no") }}
+            state: >-
+              {{ (linux_ad_auth_state == "present")
+                 | ternary("started", "stopped") }}
+          loop:
+            - sssd
+            - oddjobd
+          loop_control:
+            loop_var: ssd_service_item
+          vars:
+            ssd_services_enabled: >-
+              {{ (linux_ad_auth_state == "present") | ternary(true, false) }}
+            ssd_services_state: >-
+              {{ (linux_ad_auth_state == "present")
+                 | ternary("started", "stopped") }}
+      environment:
+        LC_ALL: en_US.UTF-8
+        LC_CTYPE: en_US.UTF-8
+      when: >-
+        ("configured: no" in ssd_realm_discover_result.stdout
+          and linux_ad_auth_state == "present")
+        or ("configured: kerberos-member" in ssd_realm_discover_result.stdout
+             and linux_ad_auth_state == "absent")

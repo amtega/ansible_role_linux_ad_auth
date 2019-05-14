@@ -1,2 +1,14 @@
 ---
 # Role variables
+
+# Max length for Netbios name
+
+linux_ad_auth_netbios_name_max_length: 15
+
+# SSSD options
+
+linux_ad_auth_sssd_id_provider: ad
+linux_ad_auth_sssd_auth_provider: ad
+linux_ad_auth_sssd_chpass_provider: ad
+linux_ad_auth_sssd_access_provider: ad
+linux_ad_auth_sssd_ldap_schema: ad

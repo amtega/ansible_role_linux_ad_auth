@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+
+[sssd]
+domains = {{ linux_ad_auth_domain }}
+config_file_version = 2
+services = nss, pam
+
+[domain/{{ linux_ad_auth_domain }}]
+id_provider = {{ linux_ad_auth_sssd_id_provider }}
+auth_provider = {{ linux_ad_auth_sssd_auth_provider }}
+chpass_provider = {{ linux_ad_auth_sssd_chpass_provider }}
+access_provider = {{ linux_ad_auth_sssd_access_provider }}
+ad_domain = {{ linux_ad_auth_domain }}
+ad_hostname = {{ linux_ad_auth_ad_hostname }}.{{ linux_ad_auth_domain }}
+krb5_realm = {{ linux_ad_auth_krb5_realm }}
+krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
+ldap_id_mapping = {{ (linux_ad_auth_sssd_ldap_id_mapping) | ternary("True", "False") }}
+ldap_schema = {{ linux_ad_auth_sssd_ldap_schema }}
+dyndns_update = {{ (linux_ad_auth_sssd_dyndns_update) | ternary("True", "False") }}
+dyndns_refresh_interval = {{ linux_ad_auth_sssd_dyndns_refresh_interval }}
+dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", "False") }}
+dyndns_ttl = {{ linux_ad_auth_sssd_dyndns_ttl }}
+realmd_tags = {{ linux_ad_auth_sssd_realmd_tags }}
+cache_credentials = {{ (linux_ad_auth_sssd_cache_credentials) | ternary("True", "False") }}
+use_fully_qualified_names = {{ (linux_ad_auth_sssd_use_fully_qualified_names) | ternary("True", "False") }}
+default_shell = {{ linux_ad_auth_sssd_default_shell }}
+fallback_homedir = {{ linux_ad_auth_sssd_fallback_homedir }}
+simple_allow_groups = {{ linux_ad_auth_sssd_simple_allow_groups | join(",") }}
