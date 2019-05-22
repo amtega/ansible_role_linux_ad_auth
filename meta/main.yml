@@ -44,6 +44,7 @@ dependencies:
       packages_os:
         all:
           all:
+            "krb5-workstation": latest
             "openldap-clients": latest
             "sssd": latest
             "oddjob-mkhomedir": latest
