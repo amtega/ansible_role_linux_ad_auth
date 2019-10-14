@@ -6,16 +6,15 @@ galaxy_info:
   description: Setup system authentication to use Windows Active Directory.
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.7
+  min_ansible_version: 2.8
   platforms:
     - name: EL
       versions:
         - 7
     - name: Fedora
       versions:
-        - 27
-        - 28
         - 29
+        - 30
     - name: Windows
       versions:
         - 2016
@@ -28,39 +27,9 @@ galaxy_info:
 
 dependencies:
   - role: amtega.check_platform
-    vars:
-      check_platform_distributions:
-        centos: 7
-        fedora: 27
-        rhel: 7
-      check_plaform_variables:
-        - linux_ad_auth_domain_controller
-        - linux_ad_auth_host_ou
     tags:
-      - role::ssd
+      - never
 
   - role: amtega.packages
-    vars:
-      packages_os:
-        all:
-          all:
-            "krb5-workstation": latest
-            "openldap-clients": latest
-            "sssd": latest
-            "oddjob-mkhomedir": latest
-          7:
-            "realmd": latest
-            "adcli": latest
-            "pam_krb5": latest
-        fedora:
-          all:
-            "realmd": latest
-            "adcli": latest
-            "pam_krb5": latest
-      packages_python:
-        all:
-          all:
-            "pexpect>=3.3": present
     tags:
-      - role::ssd
-      - role::ssd::install
+      - never
