@@ -1,4 +1,40 @@
 ---
+# Main role tasks
+
+- include_role:
+    name: amtega.check_platform
+  vars:
+    check_platform_distributions:
+      centos: 7
+      fedora: 27
+      rhel: 7
+    check_plaform_variables:
+      - linux_ad_auth_domain_controller
+      - linux_ad_auth_host_ou
+
+- include_role:
+    name: amtega.packages
+  vars:
+    packages_os:
+      all:
+        all:
+          "krb5-workstation": latest
+          "openldap-clients": latest
+          "sssd": latest
+          "oddjob-mkhomedir": latest
+        7:
+          "realmd": latest
+          "adcli": latest
+          "pam_krb5": latest
+      fedora:
+        all:
+          "realmd": latest
+          "adcli": latest
+          "pam_krb5": latest
+    packages_python:
+      all:
+        all:
+          "pexpect>=3.3": present
 
 - block:
     - name: Assert netbios name length is valid
@@ -124,3 +160,5 @@
           and linux_ad_auth_state == "present")
         or ("configured: kerberos-member" in ssd_realm_discover_result.stdout
              and linux_ad_auth_state == "absent")
+  tags:
+    - role::linux_ad_auth
