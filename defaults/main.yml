@@ -33,6 +33,11 @@ linux_ad_auth_host_netbios_name: "{{ inventory_hostname }}"
 
 linux_ad_auth_state: present
 
+# Number of seconds to pause to give time to the domain controllers to propagate
+# the changes
+
+linux_ad_auth_propagation_time: 5
+
 # Kerberos settings. See man krb5.conf(5) for details
 
 linux_ad_auth_krb5_realm: "{{ linux_ad_auth_domain | upper }}"
@@ -55,16 +60,39 @@ linux_ad_auth_krb5_pam_krb4_convert: no
 
 # SSSD settings. See man sssd.conf(5) for details
 
-linux_ad_auth_sssd_simple_allow_groups: []
+linux_ad_auth_sssd_services:
+  - nss
+  - pam
+  - pac
+  - sudo
+linux_ad_auth_sssd_reconnection_retries: 3
+linux_ad_auth_sssd_override_shell: /bin/bash
+linux_ad_auth_sssd_override_homedir: /home/%d/%u
+linux_ad_auth_sssd_description: LDAP domain with AD servers
+linux_ad_auth_sssd_domain: "{{ linux_ad_auth_domain | upper }}"
+linux_ad_auth_sssd_ad_domain: "{{ linux_ad_auth_domain }}"
+linux_ad_auth_sssd_ad_gpo_ignore_unreadable: yes
+linux_ad_auth_sssd_id_provider: ad
+linux_ad_auth_sssd_auth_provider: ad
+linux_ad_auth_sssd_chpass_provider: ad
+linux_ad_auth_sssd_access_provider: ad
+linux_ad_auth_sssd_cache_credentials: no
 linux_ad_auth_sssd_realmd_tags: manages-system joined-with-adcli
-linux_ad_auth_sssd_cache_credentials: yes
-linux_ad_auth_sssd_krb5_store_password_if_offline: yes
-linux_ad_auth_sssd_default_shell: /bin/bash
-linux_ad_auth_sssd_ldap_id_mapping: yes
 linux_ad_auth_sssd_use_fully_qualified_names: no
+linux_ad_auth_sssd_default_shell: /bin/bash
 linux_ad_auth_sssd_fallback_homedir: /home/%d/%u
-linux_ad_auth_sssd_dyndns_update: yes
+linux_ad_auth_sssd_dyndns_update: no
 linux_ad_auth_sssd_dyndns_refresh_interval: 43200
-linux_ad_auth_sssd_dyndns_update_ptr: yes
+linux_ad_auth_sssd_dyndns_update_ptr: no
 linux_ad_auth_sssd_dyndns_ttl: 3600
-linux_ad_auth_sssd_access_provider: simple
+linux_ad_auth_sssd_krb5_realm: "{{ linux_ad_auth_krb5_realm }}"
+linux_ad_auth_sssd_krb5_store_password_if_offline: yes
+linux_ad_auth_sssd_ldap_access_order:
+  - filter
+  - expire
+linux_ad_auth_sssd_force_upper_case_realm: yes
+linux_ad_auth_sssd_ldap_id_mapping: yes
+linux_ad_auth_sssd_ldap_schema: ad
+linux_ad_auth_sssd_access_filter: ""
+linux_ad_auth_sssd_enumerate: no
+linux_ad_auth_sssd_debug_level: 2
