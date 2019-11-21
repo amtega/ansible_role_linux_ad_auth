@@ -77,6 +77,7 @@
                 /usr/sbin/authconfig
                 --enablesssd
                 --enablesssdauth
+                --enablekrb5
                 --enablelocauthorize
                 --enablemkhomedir
                 --update
@@ -90,9 +91,13 @@
                 mode: 0644
                 backup: yes
 
+            - name: Give time to domain controllers to propagate changes
+              pause:
+                seconds: "{{ linux_ad_auth_propagation_time }}"
+
             - name: Join host to domain
               command: >-
-                /usr/sbin/realm join '{{ linux_ad_auth_domain_controller }}'
+                /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
                 --computer-ou='{{ linux_ad_auth_host_ou }}'
                 --computer-name='{{ linux_ad_auth_host_netbios_name }}'
                 --os-name='{{ ansible_facts.distribution }}'
@@ -113,8 +118,6 @@
                 mode: 0600
                 backup: yes
               register: linux_ad_auth_conf_result
-              vars:
-                linux_ad_auth_ad_hostname: "{{ inventory_hostname }}"
 
             - name: Restart sssd service
               service:
@@ -123,6 +126,8 @@
                 enabled: yes
               when: linux_ad_auth_conf_result.changed
           when: linux_ad_auth_state == "present"
+          vars:
+            linux_ad_auth_ad_hostname: "{{ inventory_hostname }}"
 
         - name: Remove host from domain
           command: /usr/sbin/realm leave -v

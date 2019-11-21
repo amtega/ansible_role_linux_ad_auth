@@ -59,7 +59,6 @@ If ($state -eq "present") {
 } Else {
   $desired_state = [ordered]@{
     name = $name
-    sam_account_name = $sam_account_name
     state = $state
   }
 }
@@ -69,7 +68,7 @@ Function Get-InitialState($desired_state) {
   # Test computer exists
   $computer = Try {
     Get-ADComputer `
-      -Identity $desired_state.sam_account_name `
+      -Identity "cn=$($desired_state.name),$($desired_state.ou)" `
       -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass `
       @extra_args
   } Catch { $null }
@@ -88,7 +87,6 @@ Function Get-InitialState($desired_state) {
   } Else {
     $initial_state = [ordered]@{
       name = $desired_state.name
-      sam_account_name = $desired_state.sam_account_name
       state = "absent"
     }
   }
@@ -100,8 +98,8 @@ Function Get-InitialState($desired_state) {
 Function Set-ConstructedState($initial_state, $desired_state) {
   Try {
     Set-ADComputer `
-      -Identity $desired_state.sam_account_name `s
-      -SamAccountName $desired_state.name `
+      -Identity $desired_state.name `
+      -SamAccountName $desired_state.sam_account_name `
       -DNSHostName $desired_state.dns_hostname `
       -Enabled $desired_state.enabled `
       -Description $desired_state.description `
@@ -114,7 +112,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
   If ($initial_state.distinguished_name -cne $desired_state.distinguished_name) {
     # Move computer to OU
     Try {
-      Get-ADComputer -Identity $desired_state.sam_account_name | `
+      Get-ADComputer -Identity $desired_state.name |
           Move-ADObject `
             -TargetPath $desired_state.ou `
             -Confirm:$False `
@@ -149,7 +147,7 @@ Function Add-ConstructedState($desired_state) {
 # ------------------------------------------------------------------------------
 Function Remove-ConstructedState($initial_state) {
   Try {
-    Get-ADComputer -Identity $initial_state.sam_account_name `
+    Get-ADComputer $initial_state.sam_account_name `
     | Remove-ADObject `
       -Recursive `
       -Confirm:$False `
@@ -166,12 +164,12 @@ Function Remove-ConstructedState($initial_state) {
 Function are_hashtables_equal($x, $y) {
   # Compare not nested HashTables
   Foreach ($key in $x.Keys) {
-      If (($y.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
+      If (($y.Keys -notcontains $key) -or (([String]$x[$key]).ToLower() -cne ([String]$y[$key]).ToLower())) {
           Return $false
       }
   }
   foreach ($key in $y.Keys) {
-      if (($x.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
+      if (($x.Keys -notcontains $key) -or (([String]$x[$key]).ToLower() -cne ([String]$y[$key]).ToLower())) {
           Return $false
       }
   }

@@ -1,28 +1,47 @@
 {{ ansible_managed | comment }}
 
 [sssd]
-domains = {{ linux_ad_auth_domain }}
 config_file_version = 2
-services = nss, pam
+services = {{ linux_ad_auth_sssd_services | join(", ") }}
+domains = {{ linux_ad_auth_sssd_domain }}
+reconnection_retries = {{ linux_ad_auth_sssd_reconnection_retries }}
 
-[domain/{{ linux_ad_auth_domain }}]
+[nss]
+reconnection_retries = {{ linux_ad_auth_sssd_reconnection_retries }}
+override_shell = {{ linux_ad_auth_sssd_override_shell }}
+override_homedir = {{ linux_ad_auth_sssd_override_homedir }}
+
+[pam]
+reconnection_retries = {{ linux_ad_auth_sssd_reconnection_retries }}
+
+[pac]
+
+[domain/{{ linux_ad_auth_sssd_domain }}]
+description = LDAP domain with AD servers
+ad_domain = {{ linux_ad_auth_sssd_ad_domain }}
+{% if inventory_hostname != ansible_facts.hostname %}
+ad_hostname = {{ inventory_hostname }}
+{% endif %}
+ad_gpo_ignore_unreadable = {{ (linux_ad_auth_sssd_ad_gpo_ignore_unreadable) | ternary("True", "False") }}
 id_provider = {{ linux_ad_auth_sssd_id_provider }}
 auth_provider = {{ linux_ad_auth_sssd_auth_provider }}
-chpass_provider = {{ linux_ad_auth_sssd_chpass_provider }}
 access_provider = {{ linux_ad_auth_sssd_access_provider }}
-ad_domain = {{ linux_ad_auth_domain }}
-ad_hostname = {{ linux_ad_auth_ad_hostname }}.{{ linux_ad_auth_domain }}
-krb5_realm = {{ linux_ad_auth_krb5_realm }}
-krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
-ldap_id_mapping = {{ (linux_ad_auth_sssd_ldap_id_mapping) | ternary("True", "False") }}
-ldap_schema = {{ linux_ad_auth_sssd_ldap_schema }}
-dyndns_update = {{ (linux_ad_auth_sssd_dyndns_update) | ternary("True", "False") }}
-dyndns_refresh_interval = {{ linux_ad_auth_sssd_dyndns_refresh_interval }}
-dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", "False") }}
-dyndns_ttl = {{ linux_ad_auth_sssd_dyndns_ttl }}
-realmd_tags = {{ linux_ad_auth_sssd_realmd_tags }}
+chpass_provider = {{ linux_ad_auth_sssd_chpass_provider }}
 cache_credentials = {{ (linux_ad_auth_sssd_cache_credentials) | ternary("True", "False") }}
+realmd_tags = {{ linux_ad_auth_sssd_realmd_tags }}
 use_fully_qualified_names = {{ (linux_ad_auth_sssd_use_fully_qualified_names) | ternary("True", "False") }}
 default_shell = {{ linux_ad_auth_sssd_default_shell }}
 fallback_homedir = {{ linux_ad_auth_sssd_fallback_homedir }}
-simple_allow_groups = {{ linux_ad_auth_sssd_simple_allow_groups | join(",") }}
+dyndns_update = {{ (linux_ad_auth_sssd_dyndns_update) | ternary("True", "False") }}
+dyndns_refresh_interval = {{ linux_ad_auth_sssd_dyndns_refresh_interval }}
+dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", "False") }}
+dyndns_ttl= {{ linux_ad_auth_sssd_dyndns_ttl }}
+krb5_realm = {{ linux_ad_auth_sssd_krb5_realm }}
+krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
+ldap_access_order = {{ linux_ad_auth_sssd_ldap_access_order | join(", ") }}
+ldap_force_upper_case_realm = {{ (linux_ad_auth_sssd_force_upper_case_realm) | ternary("True", "False") }}
+ldap_id_mapping = {{ (linux_ad_auth_sssd_ldap_id_mapping) | ternary("True", "False") }}
+ldap_access_filter = {{ linux_ad_auth_sssd_access_filter }}
+ldap_schema = {{ linux_ad_auth_sssd_ldap_schema }}
+enumerate = {{ (linux_ad_auth_sssd_enumerate) | ternary("True", "False") }}
+debug_level = {{ linux_ad_auth_sssd_debug_level }}
