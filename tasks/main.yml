@@ -18,19 +18,15 @@
     packages_os:
       all:
         all:
+          "adcli": latest
           "krb5-workstation": latest
-          "openldap-clients": latest
-          "sssd": latest
+          "oddjob": latest
           "oddjob-mkhomedir": latest
-        7:
-          "realmd": latest
-          "adcli": latest
+          "openldap-clients": latest
           "pam_krb5": latest
-      fedora:
-        all:
           "realmd": latest
-          "adcli": latest
-          "pam_krb5": latest
+          "samba-common-tools": latest
+          "sssd": latest
     packages_python:
       all:
         all:
