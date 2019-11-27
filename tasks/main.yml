@@ -92,18 +92,24 @@
                 seconds: "{{ linux_ad_auth_propagation_time }}"
 
             - name: Join host to domain
-              command: >-
-                /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
-                --computer-ou='{{ linux_ad_auth_host_ou }}'
-                --computer-name='{{ linux_ad_auth_host_netbios_name }}'
-                --os-name='{{ ansible_facts.distribution }}'
-                --os-version='{{ ansible_facts.distribution_version }}'
-                --verbose
+              expect:
+                command: >-
+                  /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
+                  --user="{{ linux_ad_auth_user }}"
+                  --computer-ou='{{ linux_ad_auth_host_ou }}'
+                  --computer-name='{{ linux_ad_auth_host_netbios_name }}'
+                  --os-name='{{ ansible_facts.distribution }}'
+                  --os-version='{{ ansible_facts.distribution_version }}'
+                  --verbose
+                responses:
+                  Password: "{{ linux_ad_auth_password }}"
               register: linux_ad_auth_join_realm_result
               failed_when: >-
                 linux_ad_auth_join_realm_result.rc != 0
                 and "realm: Already joined to this domain"
                     not in linux_ad_auth_join_realm_result.stdout
+              environment:
+                LANGUAGE: en_US
 
             - name: Setup sssd config file
               template:
