@@ -109,7 +109,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
     Fail-Json -obj $result -message "Failed to set the AD object $($desired_state.name): $($_.Exception.Message)"
   }
 
-  If ($initial_state.distinguished_name -cne $desired_state.distinguished_name) {
+  If ($initial_state.distinguished_name -ne $desired_state.distinguished_name) {
     # Move computer to OU
     Try {
       Get-ADComputer -Identity $desired_state.name |
@@ -164,12 +164,12 @@ Function Remove-ConstructedState($initial_state) {
 Function are_hashtables_equal($x, $y) {
   # Compare not nested HashTables
   Foreach ($key in $x.Keys) {
-      If (($y.Keys -notcontains $key) -or (([String]$x[$key]).ToLower() -cne ([String]$y[$key]).ToLower())) {
+      If (($y.Keys -notcontains $key) -or ([String]$x[$key] -ne [String]$y[$key])) {
           Return $false
       }
   }
   foreach ($key in $y.Keys) {
-      if (($x.Keys -notcontains $key) -or (([String]$x[$key]).ToLower() -cne ([String]$y[$key]).ToLower())) {
+      if (($x.Keys -notcontains $key) -or ([String]$x[$key] -ne [String]$y[$key])) {
           Return $false
       }
   }
