@@ -112,7 +112,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
   If ($initial_state.distinguished_name -ne $desired_state.distinguished_name) {
     # Move computer to OU
     Try {
-      Get-ADComputer -Identity $desired_state.name |
+      Get-ADComputer -Identity "cn=$($desired_state.name),$($desired_state.ou)" ` |
           Move-ADObject `
             -TargetPath $desired_state.ou `
             -Confirm:$False `
