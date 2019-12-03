@@ -98,7 +98,7 @@ Function Get-InitialState($desired_state) {
 Function Set-ConstructedState($initial_state, $desired_state) {
   Try {
     Set-ADComputer `
-      -Identity $desired_state.name `
+      -Identity "cn=$($desired_state.name),$($desired_state.ou)" `
       -SamAccountName $desired_state.sam_account_name `
       -DNSHostName $desired_state.dns_hostname `
       -Enabled $desired_state.enabled `
