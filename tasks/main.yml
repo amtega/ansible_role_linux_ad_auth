@@ -55,18 +55,6 @@
       changed_when: no
 
     - block:
-        - name: Setup host computer object in active directory
-          win_domain_komputer:
-            name: "{{ inventory_hostname }}"
-            sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
-            dns_hostname: >-
-              {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
-            ou: "{{ linux_ad_auth_host_ou }}"
-            description: "{{ inventory_hostname }}"
-            enabled: yes
-            state: "{{ linux_ad_auth_state }}"
-          delegate_to: "{{ linux_ad_auth_intermediate }}"
-
         - block:
             - name: Configure autentication
               command: >-
@@ -110,6 +98,18 @@
                     not in linux_ad_auth_join_realm_result.stdout
               environment:
                 LANGUAGE: en_US
+
+            - name: Setup host computer object in active directory
+              win_domain_komputer:
+                name: "{{ inventory_hostname }}"
+                sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
+                dns_hostname: >-
+                  {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
+                ou: "{{ linux_ad_auth_host_ou }}"
+                description: "{{ inventory_hostname }}"
+                enabled: yes
+                state: "{{ linux_ad_auth_state }}"
+              delegate_to: "{{ linux_ad_auth_intermediate }}"
 
             - name: Setup sssd config file
               template:
