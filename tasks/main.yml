@@ -9,7 +9,7 @@
       fedora: 27
       rhel: 7
     check_plaform_variables:
-      - linux_ad_auth_domain_controller
+      - linux_ad_auth_domain
       - linux_ad_auth_host_ou
 
 - include_role:

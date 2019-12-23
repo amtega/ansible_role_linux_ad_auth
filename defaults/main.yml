@@ -1,9 +1,9 @@
 ---
 # Role default lower priority variables
 
-# Active Directory domain controller
+# Active directory domain
 
-# linux_ad_auth_domain_controller:
+#linux_ad_auth_domain:
 
 # OU where to put host within Active Directory
 
@@ -13,12 +13,7 @@
 # computers tree. Usefull if docker you want to use an intermediate machine for
 # this task
 
-linux_ad_auth_intermediate: "{{ linux_ad_auth_domain_controller }}"
-
-# Active directory domain
-
-linux_ad_auth_domain: >-
-  {{ linux_ad_auth_domain_controller.split(".")[1:] | join(".") }}
+#linux_ad_auth_intermediate:
 
 # Username and password to use for active directory operations
 
@@ -41,7 +36,7 @@ linux_ad_auth_propagation_time: 5
 # Kerberos settings. See man krb5.conf(5) for details
 
 linux_ad_auth_krb5_realm: "{{ linux_ad_auth_domain | upper }}"
-linux_ad_auth_krb5_kdc: "{{ linux_ad_auth_domain_controller }}"
+linux_ad_auth_krb5_kdc: "{{ linux_ad_auth_domain }}"
 linux_ad_auth_krb5_admin_server: "{{ linux_ad_auth_krb5_kdc }}"
 linux_ad_auth_krb5_default_domain: "{{ linux_ad_auth_domain }}"
 linux_ad_auth_krb5_default_log: FILE:/var/log/krb5libs.log
