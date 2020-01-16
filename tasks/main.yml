@@ -1,37 +1,6 @@
 ---
 # Main role tasks
 
-- include_role:
-    name: amtega.check_platform
-  vars:
-    check_platform_distributions:
-      centos: 7
-      fedora: 27
-      rhel: 7
-    check_plaform_variables:
-      - linux_ad_auth_domain
-      - linux_ad_auth_host_ou
-
-- include_role:
-    name: amtega.packages
-  vars:
-    packages_os:
-      all:
-        all:
-          "adcli": latest
-          "krb5-workstation": latest
-          "oddjob": latest
-          "oddjob-mkhomedir": latest
-          "openldap-clients": latest
-          "pam_krb5": latest
-          "realmd": latest
-          "samba-common-tools": latest
-          "sssd": latest
-    packages_python:
-      all:
-        all:
-          "pexpect>=3.3": present
-
 - block:
     - name: Assert netbios name length is valid
       assert:
@@ -83,7 +52,7 @@
               expect:
                 command: >-
                   /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
-                  --user="{{ linux_ad_auth_user }}"
+                  --user='{{ linux_ad_auth_user }}'
                   --computer-ou='{{ linux_ad_auth_host_ou }}'
                   --computer-name='{{ linux_ad_auth_host_netbios_name }}'
                   --os-name='{{ ansible_facts.distribution }}'
