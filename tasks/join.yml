@@ -1,0 +1,26 @@
+---
+# Join host to realm
+
+- block:
+    - name: Join host to domain
+      expect:
+        command: >-
+          /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
+          --user='{{ linux_ad_auth_user }}'
+          --computer-ou='{{ linux_ad_auth_host_ou }}'
+          --computer-name='{{ linux_ad_auth_host_netbios_name }}'
+          --os-name='{{ ansible_facts.distribution }}'
+          --os-version='{{ ansible_facts.distribution_version }}'
+          --verbose
+        responses:
+          ":": "{{ linux_ad_auth_password }}"
+      register: linux_ad_auth_join_realm_result
+      failed_when: >-
+        linux_ad_auth_join_realm_result.rc != 0
+        and "realm: Already joined to this domain"
+            not in linux_ad_auth_join_realm_result.stdout
+  environment:
+    LC_ALL: en_US.UTF-8
+    LC_CTYPE: en_US.UTF-8
+  tags:
+    - role::linux_ad_auth

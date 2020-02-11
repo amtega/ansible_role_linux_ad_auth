@@ -1,0 +1,22 @@
+---
+# Main role tasks
+
+- block:
+    - name: Setup sssd config file
+      template:
+        src: sssd.conf.j2
+        dest: /etc/sssd/sssd.conf
+        owner: root
+        group: root
+        mode: 0600
+        backup: yes
+      register: linux_ad_auth_conf_result
+
+    - name: Restart sssd service
+      service:
+        name: sssd
+        state: restarted
+        enabled: yes
+      when: linux_ad_auth_conf_result.changed
+  tags:
+    - role::linux_ad_auth

@@ -1,0 +1,8 @@
+---
+# Wait time to allow changes propagation
+
+- name: Give time to domain controllers to propagate changes
+  pause:
+    seconds: "{{ linux_ad_auth_propagation_time }}"
+  tags:
+    - role::linux_ad_auth

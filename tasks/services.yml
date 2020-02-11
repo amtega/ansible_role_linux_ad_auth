@@ -1,0 +1,24 @@
+---
+# Setup domain related services
+
+- name: Setup domain related services
+  service:
+    name: "{{ ssd_service_item }}"
+    enabled: >-
+      {{ (linux_ad_auth_state == "present") | ternary("yes", "no") }}
+    state: >-
+      {{ (linux_ad_auth_state == "present")
+         | ternary("started", "stopped") }}
+  loop:
+    - sssd
+    - oddjobd
+  loop_control:
+    loop_var: ssd_service_item
+  vars:
+    ssd_services_enabled: >-
+      {{ (linux_ad_auth_state == "present") | ternary(true, false) }}
+    ssd_services_state: >-
+      {{ (linux_ad_auth_state == "present")
+         | ternary("started", "stopped") }}
+  tags:
+    - role::linux_ad_auth
