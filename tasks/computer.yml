@@ -1,0 +1,16 @@
+---
+# Main computer account in active directory
+
+- name: Setup host computer object in active directory
+  win_domain_komputer:
+    name: "{{ inventory_hostname }}"
+    sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
+    dns_hostname: >-
+      {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
+    ou: "{{ linux_ad_auth_host_ou }}"
+    description: "{{ inventory_hostname }}"
+    enabled: yes
+    state: "{{ linux_ad_auth_state }}"
+  delegate_to: "{{ linux_ad_auth_intermediate }}"
+  tags:
+    - role::linux_ad_auth

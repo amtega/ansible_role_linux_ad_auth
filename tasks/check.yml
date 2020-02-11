@@ -1,0 +1,29 @@
+---
+# Main role tasks
+
+- block:
+    - name: Assert netbios name length is valid
+      assert:
+        that: >-
+          linux_ad_auth_host_netbios_name | length
+          <= linux_ad_auth_netbios_name_max_length
+        msg: "Netbios name too long ({{ linux_ad_auth_host_netbios_name }})"
+
+    - name: Authenticate into domain
+      expect:
+        command: >-
+          kinit {{ linux_ad_auth_user }}@{{ linux_ad_auth_krb5_realm }}
+        responses:
+          Password*: "{{ linux_ad_auth_password }}"
+      changed_when: no
+      no_log: no
+
+    - name: Check domain membership
+      command: "/usr/sbin/realm discover {{ linux_ad_auth_domain }}"
+      register: ssd_realm_discover_result
+      changed_when: no
+  environment:
+    LC_ALL: en_US.UTF-8
+    LC_CTYPE: en_US.UTF-8
+  tags:
+    - role::linux_ad_auth
