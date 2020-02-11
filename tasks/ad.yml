@@ -8,9 +8,5 @@
 
     # Join to the realm
     - include_tasks: join.yml
-    - include_tasks: wait.yml
-
-    # Join process will change some account attributes that we need to override
-    - include_tasks: computer.yml
   tags:
     - role::linux_ad_auth
