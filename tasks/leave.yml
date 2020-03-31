@@ -4,10 +4,12 @@
 - name: Leave domain
   command: /usr/sbin/realm leave -v
   register: linux_ad_auth_leave_realm_result
+  changed_when: yes
   failed_when: >
     linux_ad_auth_leave_realm_result.rc != 0
     and "realm: Couldn't find a configured realm"
         not in linux_ad_auth_join_realm_result.stdout
+  when: linux_ad_auth_state == "absent"
   environment:
     LC_ALL: en_US.UTF-8
     LC_CTYPE: en_US.UTF-8
