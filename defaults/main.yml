@@ -20,7 +20,7 @@
 linux_ad_auth_user: "{{ ansible_user }}"
 linux_ad_auth_password: "{{ ansible_password }}"
 
-# Host Netbios name in active directory. Lenght must be <= 15.
+# Host Netbios name in active directory. Length must be <= 15.
 
 linux_ad_auth_host_netbios_name: "{{ inventory_hostname }}"
 
