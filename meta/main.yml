@@ -31,7 +31,7 @@ dependencies:
       check_platform_distributions:
         centos: 7
         fedora: 29
-        rhel: 7
+        redhat: 7
       check_plaform_variables:
         - linux_ad_auth_domain
         - linux_ad_auth_host_ou
