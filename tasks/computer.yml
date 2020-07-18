@@ -11,6 +11,10 @@
     description: "{{ inventory_hostname }}"
     enabled: yes
     state: "{{ linux_ad_auth_state }}"
+  register: linux_ad_auth_setup_computer_result
+  failed_when: >-
+    linux_ad_auth_setup_computer_result.msg is defined
+    and not linux_ad_auth_setup_computer_result.msg is search("already exists")
   delegate_to: "{{ linux_ad_auth_intermediate }}"
   tags:
     - role::linux_ad_auth
