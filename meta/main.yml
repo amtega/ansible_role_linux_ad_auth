@@ -13,8 +13,8 @@ galaxy_info:
         - 7
     - name: Fedora
       versions:
-        - 29
-        - 30
+        - 33
+        - 34
     - name: Windows
       versions:
         - 2016
@@ -30,7 +30,7 @@ dependencies:
     vars:
       check_platform_distributions:
         centos: 7
-        fedora: 29
+        fedora: 33
         redhat: 7
       check_plaform_variables:
         - linux_ad_auth_domain
@@ -42,14 +42,25 @@ dependencies:
         all:
           all:
             "adcli": latest
-            "krb5-workstation": latest
             "oddjob": latest
             "oddjob-mkhomedir": latest
             "openldap-clients": latest
-            "pam_krb5": latest
             "realmd": latest
             "samba-common-tools": latest
             "sssd": latest
+            "krb5-workstation": latest
+        centos:
+          7:
+            "pam_krb5": latest
+        redhat:
+          7:
+            "pam_krb5": latest
+          8:
+            "authselect": latest
+        fedora:
+          all:
+            "authselect": latest
+
       packages_python:
         all:
           all:

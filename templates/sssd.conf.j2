@@ -38,10 +38,13 @@ dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", 
 dyndns_ttl= {{ linux_ad_auth_sssd_dyndns_ttl }}
 krb5_realm = {{ linux_ad_auth_sssd_krb5_realm }}
 krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
+{% if  ansible_facts.distribution_major_version is version("7", ">") %}
+ldap_sasl_authid = {{ linux_ad_auth_host_netbios_name }}$
+{% endif %}
 ldap_access_order = {{ linux_ad_auth_sssd_ldap_access_order | join(", ") }}
 ldap_force_upper_case_realm = {{ (linux_ad_auth_sssd_force_upper_case_realm) | ternary("True", "False") }}
 ldap_id_mapping = {{ (linux_ad_auth_sssd_ldap_id_mapping) | ternary("True", "False") }}
-ldap_access_filter = {{ linux_ad_auth_sssd_access_filter }}
+ad_access_filter = {{ linux_ad_auth_sssd_access_filter }}
 ldap_schema = {{ linux_ad_auth_sssd_ldap_schema }}
 enumerate = {{ (linux_ad_auth_sssd_enumerate) | ternary("True", "False") }}
 debug_level = {{ linux_ad_auth_sssd_debug_level }}
