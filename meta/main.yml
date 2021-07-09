@@ -48,7 +48,6 @@ dependencies:
             "adcli": latest
             "oddjob": latest
             "oddjob-mkhomedir": latest
-            "openldap-clients": latest
             "realmd": latest
             "samba-common-tools": latest
             "sssd": latest
