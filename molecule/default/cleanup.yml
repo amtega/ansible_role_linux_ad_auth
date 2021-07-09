@@ -3,8 +3,6 @@
 - name: Cleanup
   hosts: "{{ linux_ad_auth_tests_host }}"
   tasks:
-    - include_tasks: check_paremeters.yml
-
     - name: Cleanup
       include_role:
         name: amtega.linux_ad_auth

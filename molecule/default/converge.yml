@@ -3,7 +3,18 @@
 - name: Converge
   hosts: "{{ linux_ad_auth_tests_host }}"
   tasks:
-    - include_tasks: check_parameters.yml
+    - name: Check test parameters have been set
+      assert:
+        that: "{{ item }} is defined"
+        msg: "Undefined mandatory var {{ item }}"
+      loop:
+        - linux_ad_auth_tests_domain
+        - linux_ad_auth_tests_host_netbios_name
+        - linux_ad_auth_tests_sssd_simple_allow_groups
+        - linux_ad_auth_tests_host_ou
+        - linux_ad_auth_tests_user
+        - linux_ad_auth_tests_password
+        - linux_ad_auth_tests_intermediate
 
     - name: Test linux_ad_auth role
       include_role:
