@@ -22,13 +22,22 @@ provisioner:
   ansible_args:
     - --inventory=${ANSIBLE_INVENTORY}
     - --vault-password-file=${ANSIBLE_VAULT_PASSWORD_FILE:-/etc/hostname}
-    - -e linux_ad_auth_tests_host=${LINUX_AD_AUTH_TESTS_HOST}
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callback_enabled: profile_tasks
       action_plugins: $PWD/action_plugins
   inventory:
     hosts:
-      molecule_hosts:        
+      molecule_hosts:
+        hosts:
+          ${LINUX_AD_AUTH_TESTS_HOST}:
+            linux_ad_auth_host_netbios_name: >-
+              ${LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME}
+        vars:
+          linux_ad_auth_domain: "{{ linux_ad_auth_tests_domain }}"
+          linux_ad_auth_host_ou: "{{ linux_ad_auth_tests_host_ou }}"
+          linux_ad_auth_user: "{{ linux_ad_auth_tests_user }}"
+          linux_ad_auth_password: "{{ linux_ad_auth_tests_password }}"
+          linux_ad_auth_intermediate: "{{ linux_ad_auth_tests_intermediate }}"
 verifier:
   name: ansible

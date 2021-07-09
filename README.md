@@ -42,14 +42,15 @@ To run the the tests you need and inventory with the following set of variables:
 
 Additionally, to run test you must setup the following environment variables:
 
-- `LINUX_AD_AUTH_TESTS_HOST`: linux system to use to test the role.
+- `LINUX_AD_AUTH_TESTS_HOST`: host to use to test the role.
+- `LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME`: netbios name to use for the host
 - `ANSIBLE_INVENTORY`: path to the inventory
 - `ANSIBLE_VAULT_PASSWORD_FILE`: path to the file containing the vault password required for the previous inventory
 
 ```shell
 cd amtega.linux_ad_auth
 
-LINUX_AD_AUTH_TESTS_HOST=mytestinghost ANSIBLE_INVENTORY=~/myinventory ANSIBLE_VAULT_PASSWORD_FILE=~/myvaultpassword molecule test --all
+LINUX_AD_AUTH_TESTS_HOST=mytestinghost LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME=mynetbiosname ANSIBLE_INVENTORY=~/myinventory ANSIBLE_VAULT_PASSWORD_FILE=~/myvaultpassword molecule test --all
 ```
 
 ## License

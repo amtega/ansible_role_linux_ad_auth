@@ -1,34 +1,10 @@
 ---
 
 - name: Converge
-  hosts: "{{ linux_ad_auth_tests_host }}"
+  hosts: molecule_hosts
   tasks:
-    - name: Check test parameters have been set
-      assert:
-        that: "{{ item }} is defined"
-        msg: "Undefined mandatory var {{ item }}"
-      loop:
-        - linux_ad_auth_tests_domain
-        - linux_ad_auth_tests_host_netbios_name
-        - linux_ad_auth_tests_sssd_simple_allow_groups
-        - linux_ad_auth_tests_host_ou
-        - linux_ad_auth_tests_user
-        - linux_ad_auth_tests_password
-        - linux_ad_auth_tests_intermediate
-
     - name: Test linux_ad_auth role
       include_role:
         name: amtega.linux_ad_auth
       vars:
         linux_ad_auth_state: present
-  vars:
-    linux_ad_auth_domain: "{{ linux_ad_auth_tests_domain }}"
-    linux_ad_auth_host_netbios_name: >-
-      {{ linux_ad_auth_tests_host_netbios_name }}
-    linux_ad_auth_sssd_simple_allow_groups:
-      - "{{ linux_ad_auth_tests_sssd_simple_allow_groups }}"
-    linux_ad_auth_host_ou: >-
-      {{ linux_ad_auth_tests_host_ou }}
-    linux_ad_auth_user: "{{ linux_ad_auth_tests_user }}"
-    linux_ad_auth_password: "{{ linux_ad_auth_tests_password }}"
-    linux_ad_auth_intermediate: "{{ linux_ad_auth_tests_intermediate }}"
