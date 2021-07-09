@@ -46,7 +46,7 @@ linux_ad_auth_krb5_dns_lookup_realm: no
 linux_ad_auth_krb5_dns_lookup_kdc: no
 linux_ad_auth_krb5_ticket_lifetime: 24h
 linux_ad_auth_krb5_renew_lifetime: 7d
-linux_ad_auth_krb5_forwardable: true
+linux_ad_auth_krb5_forwardable: yes
 linux_ad_auth_krb5_pam_debug: no
 linux_ad_auth_krb5_pam_ticket_lifetime: 36000
 linux_ad_auth_krb5_pam_renew_lifetime: 36000
