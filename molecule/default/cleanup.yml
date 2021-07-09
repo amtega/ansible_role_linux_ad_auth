@@ -1,0 +1,10 @@
+---
+
+- name: Cleanup
+  hosts: molecule_hosts
+  tasks:
+    - name: Cleanup
+      include_role:
+        name: amtega.linux_ad_auth
+      vars:
+        linux_ad_auth_state: absent

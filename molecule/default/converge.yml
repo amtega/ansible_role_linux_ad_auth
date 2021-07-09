@@ -1,0 +1,10 @@
+---
+
+- name: Converge
+  hosts: molecule_hosts
+  tasks:
+    - name: Test linux_ad_auth role
+      include_role:
+        name: amtega.linux_ad_auth
+      vars:
+        linux_ad_auth_state: present

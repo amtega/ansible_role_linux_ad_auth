@@ -1,0 +1,43 @@
+---
+
+dependency:
+  name: galaxy
+  enabled: yes
+  options:
+    ignore-certs: yes
+    ignore-errors: yes
+    role-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
+    requirements-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
+driver:
+  name: delegated
+  options:
+    managed: no
+    ansible_connection_options:
+      ansible_connection: local
+lint: "${MOLECULE_SCENARIO_DIRECTORY}/linters.sh"
+platforms:
+  - name: dummy
+provisioner:
+  name: ansible
+  ansible_args:
+    - --inventory=${ANSIBLE_INVENTORY}
+    - --vault-password-file=${ANSIBLE_VAULT_PASSWORD_FILE:-/etc/hostname}
+  config_options:
+    defaults:
+      callback_enabled: profile_tasks
+      action_plugins: $PWD/action_plugins
+  inventory:
+    hosts:
+      molecule_hosts:
+        hosts:
+          ${LINUX_AD_AUTH_TESTS_HOST}:
+            linux_ad_auth_host_netbios_name: >-
+              ${LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME}
+        vars:
+          linux_ad_auth_domain: "{{ linux_ad_auth_tests_domain }}"
+          linux_ad_auth_host_ou: "{{ linux_ad_auth_tests_host_ou }}"
+          linux_ad_auth_user: "{{ linux_ad_auth_tests_user }}"
+          linux_ad_auth_password: "{{ linux_ad_auth_tests_password }}"
+          linux_ad_auth_intermediate: "{{ linux_ad_auth_tests_intermediate }}"
+verifier:
+  name: ansible
