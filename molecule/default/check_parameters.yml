@@ -1,7 +1,6 @@
 ---
 
 - name: Check test parameters have been set
-  check_mode: no
   assert:
     that: "{{ item }} is defined"
     msg: "Undefined mandatory var {{ item }}"

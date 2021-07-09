@@ -3,7 +3,7 @@
 - name: Converge
   hosts: "{{ linux_ad_auth_tests_host }}"
   tasks:
-    - include_tasks: check.yml
+    - include_tasks: check_parameters.yml
 
     - name: Test linux_ad_auth role
       include_role:
