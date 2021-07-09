@@ -2,11 +2,15 @@
 
 galaxy_info:
   role_name: linux_ad_auth
-  author: Daniel Sánchez Fábregas / Juan Antonio Valiño García
+  namespace: amtega
+  author: >-
+    Daniel Sánchez Fábregas /
+    Juan Antonio Valiño García /
+    José Enrique Mourón Regueira
   description: Setup system authentication to use Windows Active Directory
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.9
+  min_ansible_version: 2.10
   platforms:
     - name: EL
       versions:
