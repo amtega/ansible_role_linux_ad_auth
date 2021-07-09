@@ -5,10 +5,14 @@
     - include_tasks: check.yml
     - block:
         - block:
-            - include_tasks: authentication_authconfig.yml
-              when: ansible_facts.distribution_major_version is version("7", "==")
-            - include_tasks: authentication_authselect.yml
-              when: ansible_facts.distribution_major_version is version("7", ">")
+            - include_tasks: authconfig.yml
+              when: >-
+                ansible_facts.distribution_major_version is version("7", "==")
+
+            - include_tasks: authselect.yml
+              when: >-
+                ansible_facts.distribution_major_version is version("7", ">")
+
             - include_tasks: ad.yml
             - include_tasks: sssd.yml
           when: linux_ad_auth_state == "present"
