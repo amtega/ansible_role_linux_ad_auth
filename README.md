@@ -67,4 +67,5 @@ This role is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 
 - Daniel Sánchez Fábregas.
 - Juan Antonio Valiño García.
-- José Enrique Mourón Regueira
+- José Enrique Mourón Regueira.
+- PowerShell script based on Brian Scholer (@briantist) work.
