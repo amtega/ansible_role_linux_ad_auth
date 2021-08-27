@@ -19,7 +19,7 @@ reconnection_retries = {{ linux_ad_auth_sssd_reconnection_retries }}
 [domain/{{ linux_ad_auth_sssd_domain }}]
 description = LDAP domain with AD servers
 ad_domain = {{ linux_ad_auth_sssd_ad_domain }}
-{% if inventory_hostname != ansible_facts.hostname %}
+{% if inventory_hostname != ansible_facts.hostname | default(inventory_hostname) %}
 ad_hostname = {{ inventory_hostname }}
 {% endif %}
 ad_gpo_ignore_unreadable = {{ (linux_ad_auth_sssd_ad_gpo_ignore_unreadable) | ternary("True", "False") }}
@@ -38,7 +38,7 @@ dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", 
 dyndns_ttl= {{ linux_ad_auth_sssd_dyndns_ttl }}
 krb5_realm = {{ linux_ad_auth_sssd_krb5_realm }}
 krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
-{% if  ansible_facts.distribution_major_version is version("7", ">") %}
+{% if linux_ad_auth_distro_version_result.stdout.0 is version("8", ">=") %}
 ldap_sasl_authid = {{ linux_ad_auth_host_netbios_name }}$
 {% endif %}
 ldap_access_order = {{ linux_ad_auth_sssd_ldap_access_order | join(", ") }}
