@@ -9,8 +9,8 @@
           --user='{{ linux_ad_auth_user }}'
           --computer-ou='{{ linux_ad_auth_host_ou }}'
           --computer-name='{{ linux_ad_auth_host_netbios_name }}'
-          --os-name='{{ ansible_facts.distribution }}'
-          --os-version='{{ ansible_facts.distribution_version }}'
+          --os-name='{{ linux_ad_auth_distro_version_result.stdout.1 }}'
+          --os-version='{{ linux_ad_auth_distro_version_result.stdout.0 }}'
           --verbose
         responses:
           ":": "{{ linux_ad_auth_password }}"

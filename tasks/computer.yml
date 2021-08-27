@@ -2,7 +2,7 @@
 # Main computer account in active directory
 
 - name: Setup host computer object in active directory
-  win_domain_computer:
+  linux_ad_auth_computer:
     name: "{{ inventory_hostname }}"
     sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
     dns_hostname: >-
