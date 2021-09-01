@@ -16,5 +16,8 @@
     linux_ad_auth_setup_computer_result.msg is defined
     and not linux_ad_auth_setup_computer_result.msg is search("already exists")
   delegate_to: "{{ linux_ad_auth_intermediate }}"
+  until: linux_ad_auth_setup_computer_result is success
+  retries: "{{ linux_ad_retries }}"
+  delay: "{{ linux_ad_delay }}"
   tags:
     - role::linux_ad_auth

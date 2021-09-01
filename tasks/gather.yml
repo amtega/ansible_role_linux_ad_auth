@@ -1,0 +1,24 @@
+---
+
+# This is a workaround to avoid dependency on ansible facts to
+# configure authentication
+
+- name: Gather distribution version
+  command: >-
+    {{ ansible_python_interpreter
+       | default("python") }}
+    -c "{{ linux_ad_auth_gather_distro_script }}"
+  register: linux_ad_auth_distro_version_result
+  changed_when: no
+  vars:
+    linux_ad_auth_gather_distro_script: >-
+      try:
+        import distro
+        print(distro.version())
+        print(distro.name())
+      except:
+        import platform;
+        print(platform.linux_distribution()[1])
+        print(platform.linux_distribution()[0].split(' ')[0])
+  tags:
+    - role::linux_ad_auth

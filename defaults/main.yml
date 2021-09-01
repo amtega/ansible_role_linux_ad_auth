@@ -91,3 +91,8 @@ linux_ad_auth_sssd_ldap_schema: ad
 linux_ad_auth_sssd_access_filter: ""
 linux_ad_auth_sssd_enumerate: no
 linux_ad_auth_sssd_debug_level: 2
+
+# Retrying settings for active directory operations
+
+linux_ad_retries: 5
+linux_ad_delay: 10
