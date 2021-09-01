@@ -15,13 +15,20 @@
           kinit {{ linux_ad_auth_user }}@{{ linux_ad_auth_krb5_realm }}
         responses:
           Password*: "{{ linux_ad_auth_password }}"
+      register: linux_ad_auth_domain_auth_result
       changed_when: no
+      until: linux_ad_auth_domain_auth_result is success
+      retries: "{{ linux_ad_retries }}"
+      delay: "{{ linux_ad_delay }}"
       no_log: no
 
     - name: Check domain membership
       command: "/usr/sbin/realm discover {{ linux_ad_auth_domain }}"
       register: ssd_realm_discover_result
       changed_when: no
+      until: ssd_realm_discover_result is success
+      retries: "{{ linux_ad_retries }}"
+      delay: "{{ linux_ad_delay }}"
   environment:
     LC_ALL: en_US.UTF-8
     LC_CTYPE: en_US.UTF-8
