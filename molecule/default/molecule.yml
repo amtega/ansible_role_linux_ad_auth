@@ -24,7 +24,7 @@ provisioner:
     - --vault-password-file=${ANSIBLE_VAULT_PASSWORD_FILE:-/etc/hostname}
   config_options:
     defaults:
-      callback_enabled: profile_tasks
+      callbacks_enabled: profile_tasks
       action_plugins: $PWD/action_plugins
   inventory:
     hosts:
@@ -33,11 +33,6 @@ provisioner:
           ${LINUX_AD_AUTH_TESTS_HOST}:
             linux_ad_auth_host_netbios_name: >-
               ${LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME}
-            ansible_user: admin
-            ansible_password: password
-            ansible_become_pass: password
-            ansible_become: yes
-            ansible_python_interpreter: /usr/bin/python3
         vars:
           linux_ad_auth_domain: "{{ linux_ad_auth_tests_domain }}"
           linux_ad_auth_host_ou: "{{ linux_ad_auth_tests_host_ou }}"
