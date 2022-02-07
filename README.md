@@ -28,7 +28,7 @@ A list of all the default variables for this role is available in `defaults/main
 
 ## Testing
 
-Tests are based on [molecule](https://molecule.readthedocs.io/en/latest/installation.html).
+Tests are based on [molecule with vagrant virtual machines](https://molecule.readthedocs.io/en/latest/installation.html).
 
 To run the the tests you need and inventory with the following set of variables:
 
@@ -55,7 +55,7 @@ LINUX_AD_AUTH_TESTS_HOST=mytestinghost LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME=myn
 
 ## License
 
-Copyright (C) 2021 AMTEGA - Xunta de Galicia
+Copyright (C) 2022 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 
