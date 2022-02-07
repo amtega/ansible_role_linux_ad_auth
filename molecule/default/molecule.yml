@@ -33,11 +33,17 @@ provisioner:
           ${LINUX_AD_AUTH_TESTS_HOST}:
             linux_ad_auth_host_netbios_name: >-
               ${LINUX_AD_AUTH_TESTS_HOST_NETBIOS_NAME}
+            ansible_user: admin
+            ansible_password: password
+            ansible_become_pass: password
+            ansible_become: yes
+            ansible_python_interpreter: /usr/bin/python3
         vars:
           linux_ad_auth_domain: "{{ linux_ad_auth_tests_domain }}"
           linux_ad_auth_host_ou: "{{ linux_ad_auth_tests_host_ou }}"
           linux_ad_auth_user: "{{ linux_ad_auth_tests_user }}"
           linux_ad_auth_password: "{{ linux_ad_auth_tests_password }}"
           linux_ad_auth_intermediate: "{{ linux_ad_auth_tests_intermediate }}"
+
 verifier:
   name: ansible
