@@ -3,6 +3,6 @@
 
 - block:
     - name: Configure autentication
-      command: /usr/bin/authselect select sssd with-mkhomedir
+      command: /usr/bin/authselect select sssd with-mkhomedir --force
   tags:
     - role::linux_ad_auth
