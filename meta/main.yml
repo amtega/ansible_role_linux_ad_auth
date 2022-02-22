@@ -53,12 +53,6 @@ dependencies:
             "samba-common-tools": latest
             "sssd": latest
             "krb5-workstation": latest
-        centos:
-          7:
-            "pam_krb5": latest
-          8:
-            "authselect": latest
-        redhat:
           7:
             "pam_krb5": latest
           8:
