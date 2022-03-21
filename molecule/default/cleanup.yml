@@ -2,6 +2,7 @@
 
 - name: Cleanup
   hosts: molecule_hosts
+  become: yes
   tasks:
     - name: Cleanup
       include_role:

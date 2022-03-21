@@ -2,6 +2,7 @@
 
 - name: Converge
   hosts: molecule_hosts
+  become: yes
   tasks:
     - name: Test linux_ad_auth role
       include_role:

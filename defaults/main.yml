@@ -68,7 +68,6 @@ linux_ad_auth_sssd_domain: "{{ linux_ad_auth_domain | upper }}"
 linux_ad_auth_sssd_ad_domain: "{{ linux_ad_auth_domain }}"
 linux_ad_auth_sssd_ad_gpo_ignore_unreadable: yes
 linux_ad_auth_sssd_id_provider: ad
-linux_ad_auth_sssd_auth_provider: ad
 linux_ad_auth_sssd_chpass_provider: ad
 linux_ad_auth_sssd_access_provider: ad
 linux_ad_auth_sssd_cache_credentials: no
@@ -88,9 +87,18 @@ linux_ad_auth_sssd_ldap_access_order:
 linux_ad_auth_sssd_force_upper_case_realm: yes
 linux_ad_auth_sssd_ldap_id_mapping: yes
 linux_ad_auth_sssd_ldap_schema: ad
-linux_ad_auth_sssd_access_filter: ""
 linux_ad_auth_sssd_enumerate: no
 linux_ad_auth_sssd_debug_level: 2
+
+# Auth provider. Can be ad or simple
+linux_ad_auth_sssd_auth_provider: ad
+
+# Ad filter to grant access. Only for access provider
+linux_ad_auth_sssd_access_filter: ""
+
+# List of users or groups to grant access. Only for simple access provider
+linux_ad_auth_sssd_simple_allow_users: []
+linux_ad_auth_sssd_simple_allow_groups: []
 
 # Retrying settings for active directory operations
 
