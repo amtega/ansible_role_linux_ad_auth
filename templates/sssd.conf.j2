@@ -38,7 +38,7 @@ dyndns_update_ptr = {{ (linux_ad_auth_sssd_dyndns_update_ptr) | ternary("True", 
 dyndns_ttl= {{ linux_ad_auth_sssd_dyndns_ttl }}
 krb5_realm = {{ linux_ad_auth_sssd_krb5_realm }}
 krb5_store_password_if_offline = {{ (linux_ad_auth_sssd_krb5_store_password_if_offline) | ternary("True", "False") }}
-{% if linux_ad_auth_distro_version_result.stdout.0 is version("8", ">=") %}
+{% if linux_ad_auth_distro_version_result.stdout.0 is version("7", ">=") %}
 ldap_sasl_authid = {{ linux_ad_auth_host_netbios_name }}$
 {% endif %}
 ldap_access_order = {{ linux_ad_auth_sssd_ldap_access_order | join(", ") }}
