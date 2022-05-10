@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2022-05-10
+### Fixed
+- Enabled ldap_sasl_authid for EL 7. Related to ansible/roles/amtega.mysql#14
+
 ## [1.5.0] - 2022-03-28
 ### Added
 - Added simple auth provider option. Related to ansible/main#175
