@@ -1,8 +1,7 @@
 ---
-# Leave realm
 
 - name: Leave domain
-  command: /usr/sbin/realm leave -v
+  ansible.builtin.command: /usr/sbin/realm leave -v
   register: linux_ad_auth_leave_realm_result
   changed_when: yes
   failed_when: >
@@ -19,5 +18,8 @@
   tags:
     - role::linux_ad_auth
 
-- include_tasks: computer.yml
-- include_tasks: wait.yml
+- name: Setup computer account
+  include_tasks: computer.yml
+
+- name: Wait for computer account
+  include_tasks: wait.yml

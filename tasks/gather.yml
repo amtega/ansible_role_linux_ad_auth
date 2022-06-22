@@ -4,7 +4,7 @@
 # configure authentication
 
 - name: Gather distribution version
-  command: >-
+  ansible.builtin.command: >-
     {{ ansible_python_interpreter
        | default("python") }}
     -c "{{ linux_ad_auth_gather_distro_script }}"

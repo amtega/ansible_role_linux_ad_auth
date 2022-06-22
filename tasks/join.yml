@@ -1,9 +1,9 @@
 ---
-# Join host to realm
 
-- block:
+- name: Join host to realm
+  block:
     - name: Join host to domain
-      expect:
+      ansible.builtin.expect:
         command: >-
           /usr/sbin/realm join '{{ linux_ad_auth_krb5_realm }}'
           --user='{{ linux_ad_auth_user }}'
