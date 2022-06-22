@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2022-06-22
+### Fixed
+- Fixed authconfig/authselect selection.
+- Coding standards.
+
 ## [1.5.1] - 2022-05-10
 ### Fixed
 - Enabled ldap_sasl_authid for EL 7. Related to ansible/roles/amtega.mysql#14

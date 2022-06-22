@@ -5,7 +5,7 @@
   become: yes
   tasks:
     - name: Cleanup
-      include_role:
+      ansible.builtin.include_role:
         name: amtega.linux_ad_auth
       vars:
         linux_ad_auth_state: absent

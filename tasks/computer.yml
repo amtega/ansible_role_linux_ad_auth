@@ -1,5 +1,4 @@
 ---
-# Main computer account in active directory
 
 - name: Setup host computer object in active directory
   linux_ad_auth_computer:

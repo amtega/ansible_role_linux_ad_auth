@@ -10,19 +10,19 @@ galaxy_info:
   description: Setup system authentication to use Windows Active Directory
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.10
+  min_ansible_version: "2.10"
   platforms:
     - name: EL
       versions:
-        - 7
-        - 8
+        - "7"
+        - "8"
     - name: Fedora
       versions:
-        - 34
-        - 35
+        - "34"
+        - "35"
     - name: Windows
       versions:
-        - 2016
+        - "2016"
   galaxy_tags:
     - active
     - directory

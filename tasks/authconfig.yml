@@ -1,9 +1,9 @@
 ---
-# Main role tasks
 
-- block:
+- name: Setup authconfig
+  block:
     - name: Configure autentication
-      command: >-
+      ansible.builtin.command: >-
         /usr/sbin/authconfig
         --enablesssd
         --enablesssdauth
@@ -11,9 +11,10 @@
         --enablelocauthorize
         --enablemkhomedir
         --update
+      changed_when: yes
 
     - name: Setup kerberos config file
-      template:
+      ansible.builtin.template:
         src: krb5.conf.j2
         dest: /etc/krb5.conf
         owner: root

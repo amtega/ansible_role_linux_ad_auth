@@ -1,8 +1,7 @@
 ---
-# Setup domain related services
 
 - name: Setup domain related services
-  service:
+  ansible.builtin.service:
     name: "{{ ssd_service_item }}"
     enabled: >-
       {{ (linux_ad_auth_state == "present") | ternary("yes", "no") }}
