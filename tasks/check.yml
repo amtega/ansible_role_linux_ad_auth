@@ -1,16 +1,16 @@
 ---
-# Main role tasks
 
-- block:
+- name: Check authentication status
+  block:
     - name: Assert netbios name length is valid
-      assert:
+      ansible.builtin.assert:
         that: >-
           linux_ad_auth_host_netbios_name | length
           <= linux_ad_auth_netbios_name_max_length
         msg: "Netbios name too long ({{ linux_ad_auth_host_netbios_name }})"
 
     - name: Authenticate into domain
-      expect:
+      ansible.builtin.expect:
         command: >-
           kinit {{ linux_ad_auth_user }}@{{ linux_ad_auth_krb5_realm }}
         responses:
@@ -23,7 +23,8 @@
       no_log: no
 
     - name: Check domain membership
-      command: "/usr/sbin/realm discover {{ linux_ad_auth_domain }}"
+      ansible.builtin.command: >-
+        /usr/sbin/realm discover {{ linux_ad_auth_domain }}
       register: ssd_realm_discover_result
       changed_when: no
       until: ssd_realm_discover_result is success

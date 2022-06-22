@@ -1,32 +1,45 @@
 ---
 # Main role tasks
 
-- block:
-    - include_tasks: check.yml
-    - block:
-        - block:
-            - include_tasks: gather.yml
+- name: Setup linux active directory authentication
+  block:
+    - name: Check authentication status
+      include_tasks: check.yml
 
-            - include_tasks: authconfig.yml
+    - name: Perform active directory authentication configuration
+      block:
+        - name: Add active directory authentication
+          block:
+            - name: Gather authentication info
+              include_tasks: gather.yml
+
+            - name: Setup authconfig
+              include_tasks: authconfig.yml
               when: >-
-                linux_ad_auth_distro_version_result.stdout.0
+                linux_ad_auth_distro_version_result.stdout_lines.0
                 is version("8", "<")
 
-            - include_tasks: authselect.yml
+            - name: Setup authselect
+              include_tasks: authselect.yml
               when: >-
-                linux_ad_auth_distro_version_result.stdout.0
+                linux_ad_auth_distro_version_result.stdout_lines.0
                 is version("8", ">=")
 
-            - include_tasks: ad.yml
-            - include_tasks: sssd.yml
+            - name: Setup active directory stuff
+              include_tasks: ad.yml
+
+            - name: Setup sssd
+              include_tasks: sssd.yml
           when: linux_ad_auth_state == "present"
           vars:
             linux_ad_auth_ad_hostname: "{{ inventory_hostname }}"
 
-        - include_tasks: leave.yml
+        - name: Remove active directory authentication
+          include_tasks: leave.yml
           when: linux_ad_auth_state == "absent"
 
-        - include_tasks: services.yml
+        - name: Setup authentication services
+          include_tasks: services.yml
       when: >-
         ("configured: no" in ssd_realm_discover_result.stdout
           and linux_ad_auth_state == "present")

@@ -1,9 +1,9 @@
 ---
-# Main role tasks
 
-- block:
+- name: Setup sssd
+  block:
     - name: Setup sssd config file
-      template:
+      ansible.builtin.template:
         src: sssd.conf.j2
         dest: /etc/sssd/sssd.conf
         owner: root
@@ -13,7 +13,7 @@
       register: linux_ad_auth_conf_result
 
     - name: Restart sssd service
-      service:
+      ansible.builtin.service:
         name: sssd
         state: restarted
         enabled: yes

@@ -1,14 +1,16 @@
 ---
-# Setup active directory membership
 
-- block:
+- name: Setup active directory membership
+  block:
     # Create computer account to ensure long name is used
 
-    - include_tasks: computer.yml
-    - include_tasks: wait.yml
+    - name: Setup computer account
+      ansible.builtin.include_tasks: computer.yml
 
-    # Join to the realm
-    
-    - include_tasks: join.yml
+    - name: Wait for computer account
+      ansible.builtin.include_tasks: wait.yml
+        
+    - name: Join to the realm
+      ansible.builtin.include_tasks: join.yml
   tags:
     - role::linux_ad_auth

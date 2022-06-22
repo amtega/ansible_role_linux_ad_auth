@@ -1,8 +1,10 @@
 ---
-# Main role tasks
 
-- block:
+- name: Setup authselect
+  block:
     - name: Configure autentication
-      command: /usr/bin/authselect select sssd with-mkhomedir --force
+      ansible.builtin.command: >-
+        /usr/bin/authselect select sssd with-mkhomedir --force
+      changed_when: yes
   tags:
     - role::linux_ad_auth
