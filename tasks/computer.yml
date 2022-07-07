@@ -1,22 +1,37 @@
 ---
 
-- name: Setup host computer object in active directory
-  linux_ad_auth_computer:
-    name: "{{ inventory_hostname }}"
-    sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
-    dns_hostname: >-
-      {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
-    ou: "{{ linux_ad_auth_host_ou }}"
-    description: "{{ inventory_hostname }}"
-    enabled: yes
-    state: "{{ linux_ad_auth_state }}"
-  register: linux_ad_auth_setup_computer_result
-  failed_when: >-
-    linux_ad_auth_setup_computer_result.msg is defined
-    and not linux_ad_auth_setup_computer_result.msg is search("already exists")
-  delegate_to: "{{ linux_ad_auth_intermediate }}"
-  until: linux_ad_auth_setup_computer_result is success
-  retries: "{{ linux_ad_retries }}"
-  delay: "{{ linux_ad_delay }}"
+- name: Manage computer account
+  block:
+    - name: Remove older netbios based host computer object in active directory
+      linux_ad_auth_computer:
+        name: "{{ linux_ad_auth_host_netbios_name }}"
+        sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
+        ou: "{{ linux_ad_auth_host_ou }}"
+        state: absent
+      register: linux_ad_auth_remove_netbios_computer_result
+      delegate_to: "{{ linux_ad_auth_intermediate }}"
+      until: linux_ad_auth_remove_netbios_computer_result is success
+      retries: "{{ linux_ad_retries }}"
+      delay: "{{ linux_ad_delay }}"
+
+    - name: Setup host computer object in active directory
+      linux_ad_auth_computer:
+        name: "{{ inventory_hostname }}"
+        sam_account_name: "{{ linux_ad_auth_host_netbios_name }}$"
+        dns_hostname: >-
+          {{ inventory_hostname }}.{{ linux_ad_auth_domain }}
+        ou: "{{ linux_ad_auth_host_ou }}"
+        description: "{{ inventory_hostname }}"
+        enabled: yes
+        state: "{{ linux_ad_auth_state }}"
+      register: linux_ad_auth_setup_computer_result
+      failed_when: >-
+        linux_ad_auth_setup_computer_result.msg is defined
+        and not linux_ad_auth_setup_computer_result.msg
+                is search("already exists")
+      delegate_to: "{{ linux_ad_auth_intermediate }}"
+      until: linux_ad_auth_setup_computer_result is success
+      retries: "{{ linux_ad_retries }}"
+      delay: "{{ linux_ad_delay }}"
   tags:
     - role::linux_ad_auth
